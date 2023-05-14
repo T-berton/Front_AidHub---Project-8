@@ -1,0 +1,26 @@
+.testimonial__text{
+    text-align: center;
+    margin-bottom: 3rem;
+}
+.testimonial__subtitle{
+    color: var(--text-color);
+}
+.testimonial__grid{
+    display: flex;
+    column-gap: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.testimonial__card{
+    border: 1px solid var(--secondary-color);
+    border-radius: 1rem;
+    width: 20rem; 
+    height: 25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    row-gap: 0.5rem;
+}

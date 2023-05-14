@@ -1,0 +1,37 @@
+.map__background{
+    min-height: 100vh;
+    background: rgb(150,136,100);
+background: radial-gradient(circle, rgba(150,136,100,1) 0%, rgba(237,228,205,1) 100%);
+    }
+
+.map {
+    height: 90vh;
+    width: 60vw;
+    border: solid 1px;
+    border-radius: 0.5rem;
+    margin-bottom: 4rem;
+}
+.map__text{
+    text-align: center;
+    margin-bottom: 3rem;
+}
+.map__subtitle{
+    padding-top: 2rem;
+    color: var(--text-color);
+}
+.map__title{}
+.map__container{
+    padding: 0rem 1rem;
+    display: flex;
+    column-gap: 2rem;
+}
+.request__container{
+    background-color: var(--background-color);
+    display: flex;
+    column-gap: 5rem;
+    height: 90vh;
+    box-shadow: 0 0px 12px 0 rgba(165, 148, 148, 0.2), 0 6px 20px 0 rgb(73, 69, 69);
+    border-radius: 1rem;
+    padding: 1rem 0.5rem;
+    text-align: center;
+}

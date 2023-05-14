@@ -1,0 +1,28 @@
+.step__content{
+    display: flex;
+    column-gap: 3rem;
+}
+.step__text__title{
+    margin-bottom: 1rem;
+}
+.step__text{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+.step__content__item{
+    flex: 3;
+}
+.step__content__item__text{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 1.5rem;
+}
+.step__content__item__text__subtitle{
+    margin: auto;
+}

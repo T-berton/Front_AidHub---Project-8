@@ -1,0 +1,26 @@
+.home__grid{
+display: flex;
+column-gap: 5rem;
+}
+
+.home__text{
+    flex:6;
+}
+.home__img{
+    flex:6;
+}
+.home__text__title{
+    font-size: 3.5rem;
+    line-height: 4rem;
+    margin-bottom: 1rem;
+}
+.home__text__subtitle{
+    margin-bottom: 3rem;
+    font-size: 1.4rem;
+}
+
+.home__text__keynumbers{
+    margin-top: 3rem;
+    display: flex;
+    column-gap: 3rem;
+}
