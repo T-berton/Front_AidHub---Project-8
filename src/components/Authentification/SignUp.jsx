@@ -1,17 +1,32 @@
 import './signup.css'
-import { Link } from 'react-router-dom';
-import { useState } from 'react'
-import {toast } from 'react-toastify';
+import { Link,useNavigate } from 'react-router-dom';
+import { useContext, useRef, useState } from 'react'
+import {toast,ToastContainer } from 'react-toastify';
+import '../../../node_modules/react-toastify/dist/ReactToastify.css';
+import { AuthContext } from '../../contexts/AuthContext';
+
 
 export default function SignUp(){
     const [firstName,setFirstName] = useState("");
     const [lastName,setLastName] = useState('');
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
-    const [governmentFile,setGovernmentFile] = useState("");
+    const [governmentFile,setGovernmentFile] = useState(null);
+    const [fileName, setFileName] = useState('');
+    const navigate = useNavigate();
+
+
+    const {logIn,getToken} = useContext(AuthContext);    
+    const governmentFileName = useRef();
 
     async function sendData(){
         try {
+
+            const filePattern = /\.(pdf|jpg|jpeg|png)$/;
+            if (!governmentFile) throw new Error('No file selected');
+            if (governmentFile == null) throw new Error("This field is mandatory.")
+            if (!filePattern.test(governmentFile.name)) throw new Error("Unsupported file format. Please upload a .pdf, .jpg, .jpeg or .png file");
+
             const formData = new FormData();
             formData.append('user[first_name]',firstName);
             formData.append('user[last_name]',lastName);
@@ -24,17 +39,22 @@ export default function SignUp(){
                 body: formData,
             });
 
-            if (!response.ok) throw new Error(`This is an HTTP Error ${response.status}`)
+            if (!response.ok) {throw new Error(`This is an HTTP Error ${response.status}`)
+        }
 
             setFirstName('');
             setLastName('');
             setEmail('');
             setPassword('');
             setGovernmentFile(null);
-            toast.success('Your submission has been recorded.');
+
+            governmentFileName.current.value = '';
+            toast.success('Registration confirmed !', {
+                onClose: () => navigate('/')
+              });
 
         } catch (error) {
-            toast.error(`Error submitting data: ${error}`);
+            toast.error(`${error}`);
     
         }
     }
@@ -52,7 +72,9 @@ export default function SignUp(){
         setPassword(event.target.value);
     }
     const handleGovernmentFile = (event) => {
-        setGovernmentFile(event.target.value);
+        setGovernmentFile(event.target.files[0]);
+        setFileName(event.target.files[0].name);
+
     }
 
     const handleSubmit = (event) =>{
@@ -61,7 +83,8 @@ export default function SignUp(){
     }
 
     return(
-        <>  
+        <div>  
+            <ToastContainer/>
             <div className='signup__container'>
                 <div className='signup__left'>
                     <h3 className='signup__title'>Let's get you started</h3>
@@ -76,17 +99,18 @@ export default function SignUp(){
                         </div>
                         <div className='signup__form__item'>
                             <label className='sign__up__form__label'>Email address</label>
-                            <input type='text' value={email} onChange={handleEmail} placeholder='yourname@email.com'className='sign__up__form_input'  required/>
+                            <input type='text' value={email} onChange={handleEmail} placeholder='yourname@email.com'className='sign__up__form_input' pattern='[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$'  required/>
                         </div>
                         <div className='signup__form__item'>
                             <label className='sign__up__form__label'>Create password</label>
-                            <input type='text' value={password} onChange={handlePassword} placeholder='•••••••••' className='sign__up__form_input'  required/>
+                            <input type='password' value={password} onChange={handlePassword} placeholder='•••••••••' className='sign__up__form_input' minLength="8" required/>
                             <p className='sign_up__password'>Password must contain a minimum of 8 characters</p>
                         </div>
                         <div className='signup__form__item'>
                             <label htmlFor='fileUpload' className='signup__form__customsubmit'>Government file</label>
                             <span className='signup__form__submit_description'>Submit a copy of a government-approved ID (approved formats: .jpg, .png, .pdf).</span>
-                            <input id='fileUpload' type='file' value={governmentFile} onChange={handleGovernmentFile} className='hidden' required/>
+                            <p className='signup__fileName'>{fileName}</p>
+                            <input id='fileUpload' type='file' ref={governmentFileName} onChange={handleGovernmentFile} className='hidden'/>
                         </div>
 
                         <input type='submit' value={`Sign in`} className='form__submit'/>
@@ -108,6 +132,6 @@ export default function SignUp(){
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }

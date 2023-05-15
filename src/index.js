@@ -10,6 +10,7 @@ import SignIn from './components/Authentification/SignIn';
 import SignUp from './components/Authentification/SignUp';
 import { AuthProvider } from './contexts/AuthContext';
 import SubmitRequest from './components/Request/SubmitRequest';
+import SignOut from './components/Authentification/SignOut';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
   {
     path: "/submit_request",
     element: <SubmitRequest/>,
+  },
+  {
+    path: "/sign_out",
+    element: <SignOut/>,
   }
 ]);
 

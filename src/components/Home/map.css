@@ -6,10 +6,11 @@ background: radial-gradient(circle, rgba(150,136,100,1) 0%, rgba(237,228,205,1) 
 
 .map {
     height: 90vh;
-    width: 60vw;
+    width: 100%;
     border: solid 1px;
     border-radius: 0.5rem;
     margin-bottom: 4rem;
+    flex: 8;
 }
 .map__text{
     text-align: center;
@@ -26,6 +27,7 @@ background: radial-gradient(circle, rgba(150,136,100,1) 0%, rgba(237,228,205,1) 
     column-gap: 2rem;
 }
 .request__container{
+    flex:4;
     background-color: var(--background-color);
     display: flex;
     column-gap: 5rem;
@@ -34,4 +36,11 @@ background: radial-gradient(circle, rgba(150,136,100,1) 0%, rgba(237,228,205,1) 
     border-radius: 1rem;
     padding: 1rem 0.5rem;
     text-align: center;
+    color: green;
+
+}
+.request__list{
+    width: 100%;
+    height: 100%; /* la hauteur de la liste sera la même que celle de la fenêtre de visualisation */
+    overflow-y: auto; /* cela permettra de faire défiler la liste si elle dépasse la hauteur de la fenêtre de visualisation */
 }

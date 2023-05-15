@@ -2,13 +2,19 @@
 import './signin.css'
 import sign_in_design from '../../assets/sign_in.svg'
 import logo from '../../assets/logo.svg'
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { Link,useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { AuthContext } from '../../contexts/AuthContext'
+import '../../../node_modules/react-toastify/dist/ReactToastify.css';
+import {toast,ToastContainer } from 'react-toastify';
 
 export default function SignIn(){
 
     const [email,setEmail] = useState('');
-    const [password,setPassword] = useState('')
+    const [password,setPassword] = useState('');
+    const {isAuthenticated,logIn} = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const handleEmail = (event) => {
         setEmail(event.target.value);
@@ -19,10 +25,45 @@ export default function SignIn(){
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        sendData();
+    }
+
+    useEffect(()=>{
+        if(isAuthenticated) navigate('/');
+    })
+
+    async function sendData(){
+        try {
+            const response = await fetch("http://localhost:4000/auth/login",{
+                method: 'POST',
+                body: JSON.stringify({
+                    "email":email,
+                    "password":password,
+                }),
+                headers:{
+                    'Content-type': 'application/json',
+                }
+            });
+
+            if(!response.ok) throw new Error(`HTTP Error : ${response.status}`)
+
+            const json_response = await response.json();
+            const token = json_response.token;
+            logIn(token);
+            setEmail('');
+            setPassword('');
+            navigate('/');
+
+        } catch (error) {
+            toast.error(`Connexion error: ${error}`);
+
+            
+        }
     }
 
     return(
         <div className='login__container'>
+            <ToastContainer/>
             <div className='login__nav__container'>
                 <ul className='login__nav'>
                 <li>
@@ -46,7 +87,7 @@ export default function SignIn(){
                     </div>
                     <div className='login__form__item'>
                         <label className='login__form__label'>Password</label>
-                        <input type='text' value={password} onChange={handlePassword} placeholder='•••••••••' className='login__form_input'  required/>
+                        <input type='password' value={password} onChange={handlePassword} placeholder='•••••••••' className='login__form_input'  required/>
                     </div>
                     <div className='login__form__item'>
                         <input type='submit' value={`Sign in`} className='login__form__submit'/>

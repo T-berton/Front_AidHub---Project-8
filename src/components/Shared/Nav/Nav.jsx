@@ -17,19 +17,19 @@ function Nav() {
                      <Link to={`/`} className='nav__item'>Home</Link>
                  </li>
                  <li>
-                     <Link to={`/`} className='nav__item'>Conversations</Link>
+                     <Link to={`/`} className='nav__item'>My conversation</Link>
                  </li>
                  <li>
                      <Link to={`/`} className='nav__item'>Map</Link>
                  </li>
                  <li>
-                     <Link to={`/submit_request`} className='nav__item'>Submit A Request</Link>
+                     <Link to={`/submit_request`} className='nav__item'>Submit a request</Link>
                  </li>
-                 <li>
+                 {/* <li>
                      <Link to={`/`} className='nav__item nav__btn'>MY PROFIL</Link>
-                 </li>
+                 </li> */}
                  <li>
-                     <Link to={`/`} className='nav__item nav__btn nav__btn-dark'>SIGN OUT</Link>
+                     <Link to={`/sign_out`} className='nav__item nav__btn nav__btn-dark'>SIGN OUT</Link>
                  </li>
              </ul>
             ) : (

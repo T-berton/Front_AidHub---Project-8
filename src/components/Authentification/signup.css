@@ -14,7 +14,12 @@
     padding-right: 5rem;
 
 }
-
+.signup__fileName{
+    opacity: 0.7;
+    color: black;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
 .signup__right{
     flex: 6;
     width: 100%;
