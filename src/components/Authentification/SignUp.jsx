@@ -83,7 +83,7 @@ export default function SignUp(){
     }
 
     return(
-        <div>  
+        <div className='signup'>  
             <ToastContainer/>
             <div className='signup__container'>
                 <div className='signup__left'>

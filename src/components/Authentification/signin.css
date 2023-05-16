@@ -1,6 +1,5 @@
 .login__container{
     display: flex;
-
     max-height: 100vh;
 }
 .login__design{
@@ -13,7 +12,7 @@
 .login__card{
     border: 1px solid transparent;
     border-radius: 20px;
-    padding: 2rem;
+    padding: 0.5rem 3rem;
     background-color: hsla(0, 0%, 100%, 0.30); 
     backdrop-filter: blur(20px);
     position: absolute;
@@ -35,7 +34,7 @@
 }
 
 .login__logo{
-    width: 8rem;
+    width: 7rem;
 }
 
 .login__form__label{

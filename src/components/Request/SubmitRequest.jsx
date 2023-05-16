@@ -101,12 +101,12 @@ export default function SubmitRequest(){
                             <label className='form__label'>Type of the Request</label>
                             <select className='form__input' value={typeTask} onChange={e => setTypeTask(e.target.value)} required>
                                 <option value="Material Need">Material Need</option>
-                                <option value="One-time task">One-Time Task</option>
+                                <option value="One-time Need">One-time Need</option>
                             </select>
                         </div>
                         <div className='submit__request__form__item form__item'>
                             <label className='form__label'>Tell us more about what you need</label>
-                            <textarea className='form__input submit__form__textarea' maxLength={1000} type='text' value={description} onChange={e => setDescription(e.target.value)} required/>
+                            <textarea className='form__input submit__form__textarea' maxLength={250} type='text' value={description} onChange={e => setDescription(e.target.value)} required/>
                         </div>
                         <input type='submit' value={`Submit request`} className='form__submit'/>
                     </form>

@@ -4,6 +4,12 @@ import { MapContainer,Marker,Popup,TileLayer, useMap, useMapEvents } from 'react
 import { useContext, useEffect, useState } from 'react'
 import { AuthContext } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
+import { Icon } from '@iconify/react';
+import Leaflet from 'leaflet'
+import marker_1 from '../../assets/map_marker_1.png'
+import marker_2 from '../../assets/map_marker_2.png'
+import PulseLoader from "react-spinners/ClipLoader"
+
 
 export default function Map(){
 
@@ -12,6 +18,17 @@ export default function Map(){
     const [requests,setRequest] = useState([]);
     const [error,setError] = useState(null);
     const [openItemId,setOpenItemId] = useState(null);
+    
+
+    const iconMarker1 = new Leaflet.Icon({
+        iconUrl: marker_1,
+        iconSize: [35, 35],
+      })
+    const iconMarker2 = new Leaflet.Icon({
+        iconUrl: marker_2,
+        iconSize: [35, 35],
+      })
+
     
 
     function MapEvents() {
@@ -68,10 +85,10 @@ export default function Map(){
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                {
-                 requests.map((request)=>(
-                        <Marker position={[request.latitude, request.longitude]}>
-                        <Popup>
+                    {
+                        requests.filter((request)=>{return request.task_type ==="One-time Need"}).map((request)=>(
+                        <Marker position={[request.latitude, request.longitude]} icon={iconMarker1}>
+                            <Popup>
                             <div className='popup'>
                                 <div className='popup__title'>
                                     Request n°{request.id} - {request.task_type}
@@ -83,66 +100,101 @@ export default function Map(){
                                     <Link to={`/request/${request.id}`}>Find out more</Link>
                                 </div>
                             </div>
-
-                        </Popup>
-                     </Marker>
+                            </Popup>
+                        </Marker>
+                    ))}
+                    {
+                        requests.filter((request)=>{return request.task_type ==="Material Need"}).map((request)=>(
+                        <Marker position={[request.latitude, request.longitude]} icon={iconMarker2}>
+                            <Popup>
+                            <div className='popup'>
+                                <div className='popup__title'>
+                                    Request n°{request.id} - {request.task_type}
+                                </div>
+                                <div className='popup__subtitle'>
+                                    {request.description}
+                                </div>
+                                <div className='popup__button'>
+                                    <Link to={`/request/${request.id}`}>Find out more</Link>
+                                </div>
+                            </div>
+                            </Popup>
+                        </Marker>
                     ))}
             </MapContainer>
             <div className='request__container'>
-                <div className="request__list">
-                    <h3 className='request__title'>Material Needs</h3>
-                    <ul>
+                <div className="request__container__list">
+                    <div className='request__title'>
+                        <Icon icon="mdi:folder-help" width={45} color='#968864'/>
+                        <h3>Material Needs</h3>
+                    </div>
+                    <ul className='request__list'>
                         {
                             requests.filter((request)=>{return request.task_type ==="Material Need"})
                             .map((request)=>(
-                                <li key={request.id} className='request__item'>
-                        <h3 className='request__item__title'>{request.title}</h3>
-                        <span className='request__item__arrow' onClick={() => {
-                            if (openItemId === request.id) {
-                                setOpenItemId(null);
-                            } else {
-                                setOpenItemId(request.id);
-                            }
-                        }}>
-                            {openItemId === request.id ? '▲' : '▼'}
-                        </span>
-                        {openItemId === request.id && (
-                            <div className='request__item__description'>
-                                <p>{request.description}</p>
-                                <Link to={`/request/${request.id}`}>Find out more</Link>
-                            </div>
-                        )}
-                    </li>
+                        <li key={request.id} className='request__item'>
+                            <div className='request__item__container'>
+                                <div className='request__item__title'>{request.title}</div>
+                                <span className='request__item__arrow' onClick={() => {
+                                        if (openItemId === request.id) {
+                                            setOpenItemId(null);
+                                        } else {
+                                            setOpenItemId(request.id);
+                                        }
+                                    }}>
+                                        {openItemId === request.id ? 
+                                            <Icon icon="ic:round-keyboard-double-arrow-up" width={25} color='#424241'/>
+                                            : 
+                                            <Icon icon="ic:round-keyboard-double-arrow-down" width={25} color='#424241'/>
+                                        }
+                                    </span>
+                                </div>
+                            {openItemId === request.id && (
+                                <div className='request__item__description'>
+                                    <p>{request.description}</p>
+                                    <Link to={`/request/${request.id}`} className='request__item__btn'>Find out more</Link>
+                                </div>
+                            )}
+                        </li>
                         ))}
                     </ul>
                 </div>
-                <div className="request__list">
-                    <h3 className='request__title'>One-time Needs</h3>
-                    <ul>
-                        {
-                            requests.filter((request)=>{return request.task_type ==="One-time Need"})
-                            .map((request)=>(
-                                <li key={request.id} className='request__item'>
-                                <h3 className='request__item__title'>{request.title}</h3>
-                                <span className='request__item__arrow' onClick={() => {
-                                    if (openItemId === request.id) {
-                                        setOpenItemId(null);
-                                    } else {
-                                        setOpenItemId(request.id);
-                                    }
-                                }}>
-                                    {openItemId === request.id ? '▲' : '▼'}
-                                </span>
+                    <div className="request__container__list">
+                        <div className='request__title'>
+                            <Icon icon="mdi:help-box-multiple" width={45} color='#968864'/>
+                            <h3>Material Needs</h3>
+                        </div>                        
+                        <ul className='request__list'>
+                            {
+                                requests.filter((request)=>{return request.task_type ==="One-time Need"})
+                                .map((request)=>(
+                            <li key={request.id} className='request__item'>
+                                <div className='request__item__container'>
+                                    <div className='request__item__title'>{request.title}</div>
+                                    <span className='request__item__arrow' onClick={() => {
+                                            if (openItemId === request.id) {
+                                                setOpenItemId(null);
+                                            } else {
+                                                setOpenItemId(request.id);
+                                            }
+                                        }}>
+                                            {openItemId === request.id ? 
+                                            <Icon icon="ic:round-keyboard-double-arrow-up" width={25} color='#424241'/>
+                                            : 
+                                            <Icon icon="ic:round-keyboard-double-arrow-down" width={25} color='#424241' />
+                                            }
+                                        </span>
+                                    </div>
                                 {openItemId === request.id && (
                                     <div className='request__item__description'>
                                         <p>{request.description}</p>
-                                        <Link to={`/request/${request.id}`}>Find out more</Link>
+                                        <Link to={`/request/${request.id}`} className='request__item__btn'>Find out more</Link>
                                     </div>
                                 )}
                             </li>
-                        ))}
-                    </ul>
-                </div>
+                            ))}
+                        </ul>
+                    </div>
             </div>
         </div>
     </div>
