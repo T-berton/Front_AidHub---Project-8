@@ -1,8 +1,7 @@
 import './signup.css'
 import { Link,useNavigate } from 'react-router-dom';
 import { useContext, useRef, useState } from 'react'
-import {toast,ToastContainer } from 'react-toastify';
-import '../../../node_modules/react-toastify/dist/ReactToastify.css';
+import {toast } from 'react-toastify';
 import { AuthContext } from '../../contexts/AuthContext';
 
 
@@ -84,7 +83,6 @@ export default function SignUp(){
 
     return(
         <div className='signup'>  
-            <ToastContainer/>
             <div className='signup__container'>
                 <div className='signup__left'>
                     <h3 className='signup__title'>Let's get you started</h3>

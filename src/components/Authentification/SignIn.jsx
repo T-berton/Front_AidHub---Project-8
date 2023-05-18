@@ -6,8 +6,7 @@ import { useEffect, useState } from 'react'
 import { Link,useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from '../../contexts/AuthContext'
-import '../../../node_modules/react-toastify/dist/ReactToastify.css';
-import {toast,ToastContainer } from 'react-toastify';
+import {toast } from 'react-toastify';
 
 export default function SignIn(){
 
@@ -63,7 +62,6 @@ export default function SignIn(){
 
     return(
         <div className='login__container'>
-            <ToastContainer/>
             <div className='login__nav__container'>
                 <ul className='login__nav'>
                 <li>

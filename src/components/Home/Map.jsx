@@ -18,7 +18,7 @@ export default function Map(){
     const [requests,setRequest] = useState([]);
     const [error,setError] = useState(null);
     const [openItemId,setOpenItemId] = useState(null);
-    
+    const [isLoading,setIsLoading] = useState(false);
 
     const iconMarker1 = new Leaflet.Icon({
         iconUrl: marker_1,
@@ -52,6 +52,7 @@ export default function Map(){
 
     async function fetchRequest(latitude,longitude){
         try {
+            setIsLoading(true);
             const token = getToken();
             const response = await fetch(`http://localhost:4000/requests?latitude=${latitude}&longitude=${longitude}`,{
                 headers: {
@@ -66,6 +67,9 @@ export default function Map(){
             setRequest(data);
         } catch (e) {
             setError((e));
+        }
+        finally{
+            setIsLoading(false);
         }
     }
 

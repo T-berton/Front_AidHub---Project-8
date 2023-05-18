@@ -3,8 +3,9 @@ import Nav from '../Shared/Nav/Nav'
 import './submitrequest.css'
 import { MapContainer,Marker,Popup,TileLayer,useMapEvents } from 'react-leaflet'
 import { AuthContext } from '../../contexts/AuthContext';
-import {toast,ToastContainer } from 'react-toastify';
-import '../../../node_modules/react-toastify/dist/ReactToastify.css';
+import {toast} from 'react-toastify';
+import { NotifContext } from '../../contexts/NotificationContext';
+import { CableAppContext } from '../..';
 
 export default function SubmitRequest(){
 
@@ -14,7 +15,9 @@ export default function SubmitRequest(){
     const [latitude,setLatitude] = useState(null);
     const [longitude,setLongitude] = useState(null);
     const [position,setPosition] = useState(null);
-    const {getToken} = useContext(AuthContext);
+    const {getToken,CableApp} = useContext(AuthContext);
+    const {setMessageReceived} = useContext(NotifContext);
+
 
     const token = getToken();
 
@@ -43,6 +46,17 @@ export default function SubmitRequest(){
                 console.log(await response.json()); // imprimer le corps de la réponse
                 throw new Error(`HTTP Error : ${response.status}`);
             }
+
+            const subscription = CableApp.subscriptions.create(
+                {
+                    channel: "NotificationsChannel",
+                },
+                {
+                    received: (receivedMessage) => {
+                        setMessageReceived(receivedMessage);
+                    }
+                }
+            )
 
             setDescription('');
             setLatitude(null);
@@ -84,7 +98,6 @@ export default function SubmitRequest(){
 
     return(
         <div>
-            <ToastContainer/>
             <Nav/>
             <div className='submitrequest__container '>
             <div className='submitrequest__left'>
