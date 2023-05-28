@@ -14,10 +14,11 @@ import SignOut from './components/Authentification/SignOut';
 import ActionCable from 'actioncable';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import NotifProvider from './contexts/NotificationContext';
-import Notification from './components/Shared/Notifications/Notification';
+// import NotifProvider from './contexts/NotificationContext';
+// import Notification from './components/Shared/Notifications/Notification';
 import RequestDetail from './components/Request/RequestDetail';
 import Conversation from './components/Conversation/Conversation';
+import MyRequest from './components/Request/MyRequest';
 
 
 
@@ -51,17 +52,21 @@ const router = createBrowserRouter([
   {
     path:"/conversation",
     element: <Conversation/>
+  },
+  {
+    path:"/myrequest",
+    element: <MyRequest/>
   }
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <AuthProvider>
-      <NotifProvider>
+      {/* <NotifProvider> */}
           <RouterProvider router={router} />
           <ToastContainer/>
-          <Notification/>
-      </NotifProvider>
+          {/* <Notification/> */}
+      {/* </NotifProvider> */}
     </AuthProvider>
   </React.StrictMode>
 );

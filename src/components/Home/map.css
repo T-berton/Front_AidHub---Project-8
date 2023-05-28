@@ -58,6 +58,14 @@ background: radial-gradient(circle, rgba(150,136,100,1) 0%, rgba(237,228,205,1) 
     align-items: center;
 }
 
+.request__item{
+    cursor: pointer;
+    padding: 0.5rem
+}
+.request__item:hover{
+    border: 0.5px dashed var(--text-color);
+    border-radius: 10px;
+}
 
 .request__item__title-icon{
   display: flex;
@@ -76,7 +84,9 @@ background: radial-gradient(circle, rgba(150,136,100,1) 0%, rgba(237,228,205,1) 
 }
 .request__item__arrow{
     cursor: pointer;
+    z-index: 100;
 }
+
 .request__item__arrow:hover{
     color: var(--primary-color);
 }
@@ -109,4 +119,16 @@ background: radial-gradient(circle, rgba(150,136,100,1) 0%, rgba(237,228,205,1) 
     background: linear-gradient(145deg, rgba(150,136,100,1) 0%, rgba(237,228,205,1) 100%);
     border: 1px solid var(--secondary-color);
     color: var(--background-color);
+}
+
+@media (max-width:500px) {
+    .map__container{
+    padding: 0rem 1rem;
+    display: grid;
+grid-template-columns: 1fr;
+}
+.map__background{
+    padding-bottom: 3rem;
+}
+    
 }

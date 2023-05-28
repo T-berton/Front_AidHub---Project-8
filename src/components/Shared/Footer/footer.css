@@ -72,3 +72,11 @@ hr{
     padding-bottom: 1rem;
 }
 
+@media (max-width:426px) {
+    .footer__container{
+        padding: 1rem 4rem;
+        display: grid;
+        grid-template-columns:1fr;
+        gap: 1.5rem;
+    }
+}

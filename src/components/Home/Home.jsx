@@ -7,12 +7,16 @@ import hero_banner from '../../assets/hero.svg'
 import Testimonial from './Testimonial'
 import HowDoesItWork from './HowDoesItWork'
 import Map from './Map'
+import { useContext } from 'react'
+import { AuthContext } from '../../contexts/AuthContext'
 
 function Home() {
+    const {isAuthenticated} = useContext(AuthContext);
 return (
     <>
     <Nav/>
-        <div className='container home__grid'>
+        {!isAuthenticated && (
+            <div className='container home__grid'>
             <div className='home__text'>
                 <h1 className='home__text__title'>Innovative solutions for your assistance needs</h1>
                 <p className='home__text__subtitle'>Discover all the support resources you need in one place.</p>
@@ -36,6 +40,7 @@ return (
                 <img src={hero_banner} alt="World Map" className='img' />
             </div>
         </div>
+        )} 
         <Map/>
         <HowDoesItWork/>
         <Testimonial/>

@@ -1,6 +1,6 @@
 .login__container{
     display: flex;
-    max-height: 100vh;
+    height: 100vh;
 }
 .login__design{
     display: block;
@@ -85,4 +85,29 @@
 }
 .login__nav__btn{
     border-color: var(--primary-color);
+}
+@media (max-width:500px) {
+    .login__card{
+        padding: 0.5rem 1rem;
+        translate: -1rem 5rem;
+
+    
+    }
+    .login__design{       
+         width: 100%;
+    }
+    
+}
+
+@media (max-width:426px) {
+    .login__card{
+        padding: 0.5rem 1rem;
+        translate: 0rem 5rem;
+
+    
+    }
+    .login__design{       
+         width: 100%;
+    }
+    
 }

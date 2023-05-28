@@ -8,7 +8,7 @@
 }
 
 .signup__left{
-    flex: 6;
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -25,8 +25,7 @@
     font-family: 'Courier New', Courier, monospace;
 }
 .signup__right{
-    flex: 6;
-    width: 100%;
+    flex: 1;
     min-height: 100vh;
     background: rgb(150,136,100);
     background: linear-gradient(145deg, rgba(150,136,100,1) 0%, rgba(237,228,205,1) 100%);
@@ -148,4 +147,22 @@ color: var(--primary-color);
     z-index: -1;
     left: 5px; 
     top: 5px;  
+}
+ 
+@media (max-width:768px) {
+    .signup__left{
+        padding-left: 0rem;
+        padding-right: 0rem;
+    
+    }
+    
+}
+@media (max-width:426px) {
+    .signup__left{
+        height: 100vh;
+
+    }
+    .signup__right{
+        display: none;
+    }
 }

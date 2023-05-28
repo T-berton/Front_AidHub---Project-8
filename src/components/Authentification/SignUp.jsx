@@ -3,7 +3,7 @@ import { Link,useNavigate } from 'react-router-dom';
 import { useContext, useRef, useState } from 'react'
 import {toast } from 'react-toastify';
 import { AuthContext } from '../../contexts/AuthContext';
-
+import Nav from '../Shared/Nav/Nav'
 
 export default function SignUp(){
     const [firstName,setFirstName] = useState("");
@@ -117,6 +117,7 @@ export default function SignUp(){
                 </div>
                 <div className='signup__right'>
                     <ul className='signup__nav'>
+
                         <li>
                         <Link to={`/`} className='signup__nav__item nav__item'>Home</Link>
                         </li>

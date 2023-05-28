@@ -24,3 +24,14 @@
     text-align: center;
     row-gap: 0.5rem;
 }
+@media (max-width:426px) {
+    .testimonial__grid{
+        display: grid;
+        grid-template-columns: 1fr;
+        row-gap: 2rem;
+        justify-items: center;
+    }
+    .testimonial__card{
+        align-self: center;
+    }
+}

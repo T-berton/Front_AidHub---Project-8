@@ -1,17 +1,13 @@
 .submitrequest__container{
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     font-family: 'Space Grotesk', sans-serif;
     max-height: 100vh;
     padding-left: 4rem;
     padding-right: 4rem;
-    column-gap: 3rem;
+    column-gap: 2rem;
 }
-.submitrequest__right{
-    flex: 6
-}
-.submitrequest__left{
-    flex: 6;
-}
+
 .submitrequest__left h1{
     margin: 0;
 }
@@ -25,12 +21,30 @@
     height: 4rem;
 }
 
+.request__submit{
+    margin-bottom: 1rem;
+}
 
 .submitrequest__mapcontainer {
-    height: 90%;
-    width: 100%;
+    height: 85vh;
     border: solid 1px;
     border-radius: 0.5rem;
     margin-top: 0.5rem;
 }
 
+@media (max-width:426px) {
+    .submitrequest__container{
+        min-height: 1s00vh;
+        grid-template-columns: 1fr;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        gap: 1rem;
+    }
+    .submitrequest__mapcontainer {
+        height: 80vh;
+        width: 100%;
+        border: solid 1px;
+        border-radius: 0.5rem;
+        margin-top: 0.5rem;
+    }
+}

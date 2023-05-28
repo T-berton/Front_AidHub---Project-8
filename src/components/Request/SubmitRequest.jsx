@@ -4,8 +4,7 @@ import './submitrequest.css'
 import { MapContainer,Marker,Popup,TileLayer,useMapEvents } from 'react-leaflet'
 import { AuthContext } from '../../contexts/AuthContext';
 import {toast} from 'react-toastify';
-import { NotifContext } from '../../contexts/NotificationContext';
-import { CableAppContext } from '../..';
+// import { NotifContext } from '../../contexts/NotificationContext';
 
 export default function SubmitRequest(){
 
@@ -16,7 +15,7 @@ export default function SubmitRequest(){
     const [longitude,setLongitude] = useState(null);
     const [position,setPosition] = useState(null);
     const {getToken,CableApp} = useContext(AuthContext);
-    const {setMessageReceived} = useContext(NotifContext);
+    // const {setMessageReceived,setSubscription} = useContext(NotifContext);
 
 
     const token = getToken();
@@ -47,17 +46,32 @@ export default function SubmitRequest(){
                 throw new Error(`HTTP Error : ${response.status}`);
             }
 
-            const subscription = CableApp.subscriptions.create(
-                {
-                    channel: "NotificationsChannel",
-                },
-                {
-                    received: (receivedMessage) => {
-                        setMessageReceived(receivedMessage);
-                    }
-                }
-            )
+            const response_json= await response.json();
 
+
+            // if (!CableApp || !CableApp.cable) {
+            //     throw new Error("WebSocket connection is not available");
+            // }
+            // const subscription = CableApp.cable.subscriptions.create(
+            //     {
+            //         channel: "NotificationsChannel",
+            //         request_id: response_json.id,
+            //     },
+            //     {
+            //         received: (receivedMessage) => {
+            //             setMessageReceived((oldMessages)=>({
+            //                 ...oldMessages,
+            //                 [response_json.id]:receivedMessage
+            //             }));
+            //         }
+            //     }
+            // )            
+
+            // setSubscription((oldSubscriptions=>({
+            //     ...oldSubscriptions,
+            //     [response_json.id]: subscription,
+            // })));
+            
             setDescription('');
             setLatitude(null);
             setLongitude(null);
@@ -78,8 +92,8 @@ export default function SubmitRequest(){
     function LocationMarker(){
         const map = useMapEvents({
             click(e){
-                let lat = parseFloat(e.latlng.lat.toFixed(2));
-                let lng = parseFloat(e.latlng.lng.toFixed(2));
+                let lat = parseFloat(e.latlng.lat.toFixed(10));
+                let lng = parseFloat(e.latlng.lng.toFixed(10));
                 setPosition(e.latlng);
                 setLatitude(lat);
                 setLongitude(lng);
@@ -99,42 +113,42 @@ export default function SubmitRequest(){
     return(
         <div>
             <Nav/>
-            <div className='submitrequest__container '>
-            <div className='submitrequest__left'>
-                    <h1>
-                        Submit a <span className='text-secondary'>request</span>
-                    </h1>
-                    <h2>Submit a request swiftly, conveniently and simply by pinpointing your location. Aid others by identifying a problem or opportunity for improvement.</h2>
-                    <form className='submitrequest__form' onSubmit={handleSubmit}>
-                        <div className='submit__request__form__item form__item'>
-                            <label className='form__label'>Title of the Request</label>
-                            <input className='form__input' type='text' value={title} onChange={e => setTitle(e.target.value)} required/>
+                    <form className='submitrequest__form submitrequest__container' onSubmit={handleSubmit}>
+                        <div className='submitrequest__left'>
+                            <h1>
+                                Submit a <span className='text-secondary'>request</span>
+                            </h1>
+                            <h2>Submit a request swiftly, conveniently and simply by pinpointing your location. Aid others by identifying a problem or opportunity for improvement.</h2>
+                            <div className='submit__request__form__item form__item'>
+                                <label className='form__label'>Title of the Request</label>
+                                <input className='form__input' type='text' value={title} onChange={e => setTitle(e.target.value)} required/>
+                            </div>
+                            <div className='submit__request__form__item form__item'>
+                                <label className='form__label'>Type of the Request</label>
+                                <select className='form__input' value={typeTask} onChange={e => setTypeTask(e.target.value)} required>
+                                    <option value="Material Need">Material Need</option>
+                                    <option value="One-time Need">One-time Need</option>
+                                </select>
+                            </div>
+                            <div className='submit__request__form__item form__item'>
+                                <label className='form__label'>Tell us more about what you need</label>
+                                <textarea className='form__input submit__form__textarea' maxLength={250} type='text' value={description} onChange={e => setDescription(e.target.value)} required/>
+                            </div>
                         </div>
-                        <div className='submit__request__form__item form__item'>
-                            <label className='form__label'>Type of the Request</label>
-                            <select className='form__input' value={typeTask} onChange={e => setTypeTask(e.target.value)} required>
-                                <option value="Material Need">Material Need</option>
-                                <option value="One-time Need">One-time Need</option>
-                            </select>
-                        </div>
-                        <div className='submit__request__form__item form__item'>
-                            <label className='form__label'>Tell us more about what you need</label>
-                            <textarea className='form__input submit__form__textarea' maxLength={250} type='text' value={description} onChange={e => setDescription(e.target.value)} required/>
-                        </div>
-                        <input type='submit' value={`Submit request`} className='form__submit'/>
-                    </form>
-                </div>
-                <div className='submitrequest__right'>
-                <label className='form__label'>Where do you need help ?</label>
-                    <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false} className='submitrequest__mapcontainer'>
+                        <div className='submitrequest__right'>
+                        <label className='form__label'>Where do you need help ?</label>
+                        <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false} className='submitrequest__mapcontainer'>
                         <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        detectRetina={true}
                         />
                         <LocationMarker/>
-                    </MapContainer>
-                </div>
-            </div>
+                        </MapContainer>
+                        </div>
+                        <input type='submit' value={`Submit request`} className='form__submit request__submit'/>
+                    </form>
+
         </div>
     )
 }

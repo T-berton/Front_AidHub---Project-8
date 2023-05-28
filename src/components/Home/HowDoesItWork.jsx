@@ -10,7 +10,7 @@ import step4 from '../../assets/step4.svg'
 export default function HowDoesItWork()
 {
     return(
-            <div className='container step__container'>
+            <div className='container'>
                 <div className='step__text'>
                     <h1 className='step__text__title'>How does it work ?</h1>
                     <p className='step__text__subtitle'>Explore the various stages involved in joining our app, and begin offering assistance or seeking help from others.</p>

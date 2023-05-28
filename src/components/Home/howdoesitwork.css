@@ -13,7 +13,7 @@
     margin-bottom: 3rem;
 }
 .step__content__item{
-    flex: 3;
+    flex: 1;
 }
 .step__content__item__text{
     display: flex;
@@ -25,4 +25,15 @@
 }
 .step__content__item__text__subtitle{
     margin: auto;
+}
+
+@media (max-width:426px) {
+    .step__content{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        row-gap: 2rem;
+    }
+    .step__content__item{
+        flex: none;
+    }
 }
