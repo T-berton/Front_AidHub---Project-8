@@ -1,9 +1,7 @@
 import './signup.css'
 import { Link,useNavigate } from 'react-router-dom';
-import { useContext, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import {toast } from 'react-toastify';
-import { AuthContext } from '../../contexts/AuthContext';
-import Nav from '../Shared/Nav/Nav'
 
 export default function SignUp(){
     const [firstName,setFirstName] = useState("");
@@ -15,7 +13,6 @@ export default function SignUp(){
     const navigate = useNavigate();
 
 
-    const {logIn,getToken} = useContext(AuthContext);    
     const governmentFileName = useRef();
 
     async function sendData(){

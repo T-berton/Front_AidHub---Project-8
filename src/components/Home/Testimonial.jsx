@@ -14,7 +14,7 @@ export default function Testimonial(){
             <div className='testimonial__grid'>
                 <div className='testimonial__card'>
                     <div className='testimonial__card__img'>
-                        <img src={user_1} alt="Profil picture user" />
+                        <img src={user_1} alt="Profil user" />
                     </div>
                     <h3 className='testimonial__card__name'>
                         Steven Spielberg
@@ -28,7 +28,7 @@ export default function Testimonial(){
                 </div>
                 <div className='testimonial__card'>
                     <div className='testimonial__card__img'>
-                        <img src={user_2} alt="Profil picture user" />
+                        <img src={user_2} alt="Profil user" />
                     </div>
                     <h3 className='testimonial__card__name'>
                         Steven Spielberg
@@ -42,7 +42,7 @@ export default function Testimonial(){
                 </div>
                 <div className='testimonial__card'>
                     <div className='testimonial__card__img'>
-                        <img src={user_3} alt="Profil picture user" />
+                        <img src={user_3} alt="Profil user" />
                     </div>
                     <h3 className='testimonial__card__name'>
                         Steven Spielberg

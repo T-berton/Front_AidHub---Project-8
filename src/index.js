@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import {
@@ -11,7 +11,6 @@ import SignUp from './components/Authentification/SignUp';
 import { AuthProvider } from './contexts/AuthContext';
 import SubmitRequest from './components/Request/SubmitRequest';
 import SignOut from './components/Authentification/SignOut';
-import ActionCable from 'actioncable';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // import NotifProvider from './contexts/NotificationContext';

@@ -7,7 +7,7 @@ import { Fade as Hamburger } from 'hamburger-react'
 
 
 function Nav() {
-    const {isAuthenticated,logOut} = useContext(AuthContext);
+    const {isAuthenticated} = useContext(AuthContext);
     return(
         <nav className='nav'>
             <Link to={`/`}>

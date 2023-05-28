@@ -11,34 +11,34 @@ import { Icon } from '@iconify/react';
 
 export default function RequestDetail(){
     const {requestId} = useParams();
-    const {getToken,CableApp} = useContext(AuthContext);
+    const {getToken} = useContext(AuthContext);
 
     const [request,setRequest] = useState(null);
-    const [error,setError] = useState(null);
-    async function fetchRequest(){
-        try {
-            const token = getToken();
-            const response = await fetch(`http://localhost:4000/requests/${requestId}`,
-            {
-                headers:{
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type':'application/json'
-                }
-            });
 
-            if (!response.ok) {
-                throw new Error(`HTTP ERROR : ${response.status}`)
-            }
-
-            const data = await response.json();
-            setRequest(data);
-        } catch (error) {
-            setError(error);
-        }
-    }
     useEffect(()=>{
+        async function fetchRequest(){
+            try {
+                const token = getToken();
+                const response = await fetch(`http://localhost:4000/requests/${requestId}`,
+                {
+                    headers:{
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type':'application/json'
+                    }
+                });
+    
+                if (!response.ok) {
+                    throw new Error(`HTTP ERROR : ${response.status}`)
+                }
+    
+                const data = await response.json();
+                setRequest(data);
+            } catch (error) {
+                toast.error(`${error}`)
+            }
+        }
         fetchRequest();
-    },[requestId]);
+    },[requestId,getToken]);
 
 
     async function handleConversation(){
@@ -63,11 +63,9 @@ export default function RequestDetail(){
                 throw new Error(`HTTP ERROR : ${response.status}`);
             }
 
-            const response_json= await response.json();
             toast.success('Conversation created with the Requester'); // affiche une notification de succès
 
         } catch (error) {
-            setError(error);
             toast.error(`${error}`);
 
         }

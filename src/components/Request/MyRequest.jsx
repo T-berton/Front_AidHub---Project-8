@@ -12,30 +12,30 @@ export default function MyRequest(){
     const [requests,setRequests] = useState(null);
     const token = getToken();
 
-    async function fetchData(){
-        try {
-            const response = await fetch(`http://localhost:4000/requests?my_requests=true`,{
-                headers:{
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok){
-                throw new Error(`HTTP ERROR: ${response.status}`);
-            }
-
-            const response_json = await response.json();
-            setRequests(response_json);
-
-        } catch (error) {
-            toast.error(`${error}`)
-        }
-    }
 
     useEffect(()=>{
+        async function fetchData(){
+            try {
+                const response = await fetch(`http://localhost:4000/requests?my_requests=true`,{
+                    headers:{
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+    
+                if (!response.ok){
+                    throw new Error(`HTTP ERROR: ${response.status}`);
+                }
+    
+                const response_json = await response.json();
+                setRequests(response_json);
+    
+            } catch (error) {
+                toast.error(`${error}`)
+            }
+        }
         fetchData();
-    },[])
+    },[token])
 
     async function handleRepublish(request_id) {
         try {

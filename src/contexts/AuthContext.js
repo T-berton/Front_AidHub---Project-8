@@ -18,14 +18,14 @@ export function AuthProvider({children}){
             setCableApp(newCableApp);
         } 
         setLoading(false);
-    },[]);
+    },[CableApp?.cable]);
     
     useEffect(()=>{
         if (!isAuthenticated && CableApp && CableApp.cable) {
             CableApp.cable.disconnect();
             setCableApp(null);
           }
-    },[isAuthenticated]);
+    },[isAuthenticated,CableApp]);
 
     function logIn(token){
         setIsAuthenticated(true);

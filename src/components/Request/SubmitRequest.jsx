@@ -4,7 +4,6 @@ import './submitrequest.css'
 import { MapContainer,Marker,Popup,TileLayer,useMapEvents } from 'react-leaflet'
 import { AuthContext } from '../../contexts/AuthContext';
 import {toast} from 'react-toastify';
-// import { NotifContext } from '../../contexts/NotificationContext';
 
 export default function SubmitRequest(){
 
@@ -14,8 +13,7 @@ export default function SubmitRequest(){
     const [latitude,setLatitude] = useState(null);
     const [longitude,setLongitude] = useState(null);
     const [position,setPosition] = useState(null);
-    const {getToken,CableApp} = useContext(AuthContext);
-    // const {setMessageReceived,setSubscription} = useContext(NotifContext);
+    const {getToken} = useContext(AuthContext);
 
 
     const token = getToken();
@@ -46,32 +44,7 @@ export default function SubmitRequest(){
                 throw new Error(`HTTP Error : ${response.status}`);
             }
 
-            const response_json= await response.json();
 
-
-            // if (!CableApp || !CableApp.cable) {
-            //     throw new Error("WebSocket connection is not available");
-            // }
-            // const subscription = CableApp.cable.subscriptions.create(
-            //     {
-            //         channel: "NotificationsChannel",
-            //         request_id: response_json.id,
-            //     },
-            //     {
-            //         received: (receivedMessage) => {
-            //             setMessageReceived((oldMessages)=>({
-            //                 ...oldMessages,
-            //                 [response_json.id]:receivedMessage
-            //             }));
-            //         }
-            //     }
-            // )            
-
-            // setSubscription((oldSubscriptions=>({
-            //     ...oldSubscriptions,
-            //     [response_json.id]: subscription,
-            // })));
-            
             setDescription('');
             setLatitude(null);
             setLongitude(null);

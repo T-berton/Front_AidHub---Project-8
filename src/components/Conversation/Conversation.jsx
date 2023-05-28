@@ -1,6 +1,6 @@
 import Nav from '../Shared/Nav/Nav'
 import './conversation.css'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState,useCallback } from 'react'
 import { AuthContext } from '../../contexts/AuthContext';
 import { toast } from 'react-toastify';
 import { decodeToken  } from "react-jwt";
@@ -23,7 +23,57 @@ export default function Conversation(){
 
   const [otherUser,setOtherUser] = useState();
 
-  async function fetchConversations(){
+  
+  const fetchMessage = useCallback(async (conversationId) => {
+    try {
+      const response = await fetch(`http://localhost:4000/messages?conversation_id=${conversationId}`,{
+        headers:{
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (!response.ok){
+        throw new Error(`${response.status}`);
+    }
+
+    const message_json = await response.json();
+    console.log(message_json);
+    setMessages(prevMessages =>({...prevMessages,[conversationId]:message_json}));
+      
+    } catch (error) {
+      toast.error(`${error}`);
+    }
+  },[token]);
+  
+async function sendMessage(){
+  try {
+    const response = await fetch(`http://localhost:4000/messages`,{
+        method:"POST",
+        body: JSON.stringify({
+          "message":{
+            "conversation_id":selectedConversation,
+            "content":messageSent,
+          } 
+        }),
+        headers:{
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+    });
+
+    if (!response.ok){
+        throw new Error(`${response.status}`);
+    }
+    setMessageSent("")
+  } catch (error) {
+    toast.error(`${error}`);
+  }
+}
+
+
+  useEffect(()=>{
+    async function fetchConversations(){
       try {
         const myDecodedToken = decodeToken(token);
         setCurrentUserId(myDecodedToken.user_id);      
@@ -55,63 +105,14 @@ export default function Conversation(){
       }
   }
 
-  async function fetchMessage(conversationId){
-    try {
-      const response = await fetch(`http://localhost:4000/messages?conversation_id=${conversationId}`,{
-        headers:{
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        }
-    });
-
-    if (!response.ok){
-        throw new Error(`${response.status}`);
-    }
-
-    const message_json = await response.json();
-    console.log(message_json);
-    setMessages(prevMessages =>({...prevMessages,[conversationId]:message_json}));
-      
-    } catch (error) {
-      toast.error(`${error}`);
-    }
-  };
-  
-async function sendMessage(){
-  try {
-    const response = await fetch(`http://localhost:4000/messages`,{
-        method:"POST",
-        body: JSON.stringify({
-          "message":{
-            "conversation_id":selectedConversation,
-            "content":messageSent,
-          } 
-        }),
-        headers:{
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-        },
-    });
-
-    if (!response.ok){
-        throw new Error(`${response.status}`);
-    }
-    setMessageSent("")
-  } catch (error) {
-    toast.error(`${error}`);
-  }
-}
-
-
-  useEffect(()=>{
       fetchConversations();
-  },[]);
+  },[token]);
 
   useEffect(()=>{
     if (selectedConversation && !messages[selectedConversation]) {
       fetchMessage(selectedConversation);
     }
-  },[selectedConversation]);
+  },[selectedConversation,fetchMessage,messages]);
   
   useEffect(()=>{
     if (selectedConversation && CableApp?.cable) {
@@ -145,7 +146,7 @@ async function sendMessage(){
             subscription.unsubscribe();
         }
     };
-},[selectedConversation,CableApp?.cable]);
+},[selectedConversation,CableApp?.cable,subscription]);
 
 
   if (Loading) {
@@ -163,7 +164,7 @@ return(
           </h3>
         </div>
         <div className='conversation__header__user'>
-          <img src={profile_picture_1} alt='Profile Picture'/> 
+          <img src={profile_picture_1} alt='Profile'/> 
           {
             otherUser && (
               <p>{otherUser.user?.first_name} {otherUser.user?.last_name}</p>
@@ -178,7 +179,7 @@ return(
               conversations.map((conversation)=>(
               <li key={conversation.id} onClick={()=>{setSelectedConversation(conversation.id);setOtherUser(conversation.otherUser)}}>
                 <div className='conversation__list__header'>
-                  <img src={profile_picture_1} alt='Profile Picture'/>  
+                  <img src={profile_picture_1} alt='Profile'/>  
                   <div>
                       {conversation.otherUser && (
                           <h3>

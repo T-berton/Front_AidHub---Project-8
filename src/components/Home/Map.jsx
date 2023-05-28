@@ -1,6 +1,6 @@
 import './map.css'
 
-import { MapContainer,Marker,Popup,TileLayer, useMap, useMapEvents } from 'react-leaflet'
+import { MapContainer,Marker,Popup,TileLayer} from 'react-leaflet'
 import { useContext, useEffect, useMemo, useState,useCallback} from 'react'
 import { AuthContext } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
@@ -8,8 +8,8 @@ import { Icon } from '@iconify/react';
 import Leaflet from 'leaflet'
 import marker_1 from '../../assets/map_marker_1.png'
 import marker_2 from '../../assets/map_marker_2.png'
-import PulseLoader from "react-spinners/ClipLoader"
 import {debounce} from "lodash"
+import { toast } from 'react-toastify';
 
 
 export default function Map(){
@@ -17,14 +17,10 @@ export default function Map(){
     const {isAuthenticated,getToken} = useContext(AuthContext);
     const token = getToken();
     
-    const debouncedFetchRequest = debounce(fetchRequest,100);
 
     const [requests,setRequest] = useState([]);
     const [allRequestsCounter,setAllRequestsCounter] = useState([]);
-    const [error,setError] = useState(null);
     const [openItemId,setOpenItemId] = useState(null);
-    const [isLoading,setIsLoading] = useState(false);
-    const [selectedRequest,setSelectedRequest] = useState({});
     const [map,setMap] = useState(null);
 
 
@@ -57,14 +53,10 @@ export default function Map(){
         return null
     }  
 
-    useEffect(() => {
-        // Appel initial à fetchRequest avec les coordonnées du centre par défaut
-        fetchRequest(51.505, -0.09);
-      }, []);
+   
 
-    async function fetchRequest(latitude,longitude){
+    const fetchRequest=  useCallback(async(latitude,longitude)=>{
         try {
-            setIsLoading(true);
             const response = await fetch(`http://localhost:4000/requests?latitude=${latitude}&longitude=${longitude}`,{
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -77,36 +69,39 @@ export default function Map(){
             const data = await response.json();
             setRequest(data);
         } catch (e) {
-            setError((e));
+            toast.error(`${e}`)
         }
-        finally{
-            setIsLoading(false);
-        }
-    }
+ 
+    },[token]);
 
-async function fetchAllRequests() {
-    try {
-        const response = await fetch(`http://localhost:4000/requests`, {  // Your API endpoint for all requests
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-        });
-        if (!response.ok){
-            throw new Error(`HTTP ERROR : ${response.status}`);
-        }
-        const data = await response.json();
+    const debouncedFetchRequest = debounce(fetchRequest,100);
 
-        setAllRequestsCounter(data.length);
-    } catch (e) {
-        setError(e);
-    }
-    finally{
-        setIsLoading(false);
-    }
-}
+    useEffect(() => {
+        // Appel initial à fetchRequest avec les coordonnées du centre par défaut
+        fetchRequest(51.505, -0.09);
+      }, [fetchRequest]);
+
+
 
 useEffect(()=>{
+    async function fetchAllRequests() {
+        try {
+            const response = await fetch(`http://localhost:4000/requests`, {  // Your API endpoint for all requests
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            });
+            if (!response.ok){
+                throw new Error(`HTTP ERROR : ${response.status}`);
+            }
+            const data = await response.json();
+    
+            setAllRequestsCounter(data.length);
+        } catch (e) {
+            toast.error(`${e}`)
+        }
+    }
     if (isAuthenticated) {
         fetchAllRequests();
         const intervalFetch = setInterval(()=>{
@@ -115,7 +110,7 @@ useEffect(()=>{
         return () => clearInterval(intervalFetch);
     }
 
-},[]);
+},[isAuthenticated,token]);
 
 const displayMap = useMemo(
     () => (
@@ -162,7 +157,7 @@ const displayMap = useMemo(
                 </Marker>
             ))}
     </MapContainer>
-    ),[requests],
+    ),[requests,iconMarker1,iconMarker2,isAuthenticated],
 )
 
 
@@ -180,9 +175,6 @@ const displayMap = useMemo(
         <div className="map__container">
             {
                 map ? <MapEvents map={map} />: null
-            }
-            {
-                // map ? <FlyToSelectedLocation map={map} /> : null
             }
             {displayMap}
             <div className='request__container'>
