@@ -1,7 +1,7 @@
 import './map.css'
 
 import { MapContainer,Marker,Popup,TileLayer, useMap, useMapEvents } from 'react-leaflet'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState,useCallback} from 'react'
 import { AuthContext } from '../../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
@@ -17,7 +17,7 @@ export default function Map(){
     const {isAuthenticated,getToken} = useContext(AuthContext);
     const token = getToken();
     
-    const debouncedFetchRequest = debounce(fetchRequest,1000);
+    const debouncedFetchRequest = debounce(fetchRequest,100);
 
     const [requests,setRequest] = useState([]);
     const [allRequestsCounter,setAllRequestsCounter] = useState([]);
@@ -25,6 +25,7 @@ export default function Map(){
     const [openItemId,setOpenItemId] = useState(null);
     const [isLoading,setIsLoading] = useState(false);
     const [selectedRequest,setSelectedRequest] = useState({});
+    const [map,setMap] = useState(null);
 
 
     const iconMarker1 = new Leaflet.Icon({
@@ -35,40 +36,26 @@ export default function Map(){
         iconUrl: marker_2,
         iconSize: [35, 35],
       })
-
-      const [lastCenteredPosition, setLastCenteredPosition] = useState({});
-      const [selectedLatitude, setSelectedLatitude] = useState();
-      const [selectedLongitude, setSelectedLongitude] = useState();
     
 
-    function MapEvents() {
+    function MapEvents({map}) {
 
-      const map = useMapEvents({
-            moveend: () =>{
-                const center = map.getCenter();
-                let lat = parseFloat(center.lat.toFixed(6));
-                let lng = parseFloat(center.lng.toFixed(6));
-                debouncedFetchRequest(lat,lng)
+        const onMove = useCallback(() => {
+            let lat = parseFloat(map.getCenter().lat);
+            let lng = parseFloat(map.getCenter().lng);
+            debouncedFetchRequest(lat,lng)
+            console.log("coucou")
+            }, [map])
+
+        useEffect(() => {
+            map.on('moveend', onMove)
+            return () => {
+                map.off('moveend', onMove)
             }
-        })   
+            }, [map, onMove])
+
         return null
-    }
-    function Test(){
-
-        const map = useMap();
-
-        useEffect(()=>{
-            console.log('useEffect ran');
-            if (selectedLatitude && selectedLongitude ) {
-                console.log('useEffect ran inside if', selectedLatitude, selectedLongitude);
-                map.flyTo([selectedLatitude,selectedLongitude],13);
-                // setLastCenteredPosition(selectedRequest);
-            }
-        },[selectedLatitude,selectedLongitude])
-      
-    }
-
-  
+    }  
 
     useEffect(() => {
         // Appel initial à fetchRequest avec les coordonnées du centre par défaut
@@ -130,6 +117,54 @@ useEffect(()=>{
 
 },[]);
 
+const displayMap = useMemo(
+    () => (
+        <MapContainer center={[48.8588376, 2.2775176]} zoom={13} scrollWheelZoom={false} ref={setMap} className={`${isAuthenticated === true ? 'map' : 'map'}`}>        
+        <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        detectRetina={true}
+        />
+            {
+                requests.filter((request)=>{return request.task_type ==="One-time Need"}).map((request)=>(
+                <Marker position={[request.latitude, request.longitude]} icon={iconMarker1}>
+                    <Popup>
+                    <div className='popup'>
+                        <div className='popup__title'>
+                            Request n°{request.id} - {request.task_type}
+                        </div>
+                        <div className='popup__subtitle'>
+                            {request.description}
+                        </div>
+                        <div className='popup__button'>
+                            <Link to={`/request/${request.id}`}>Find out more</Link>
+                        </div>
+                    </div>
+                    </Popup>
+                </Marker>
+            ))}
+            {
+                requests.filter((request)=>{return request.task_type ==="Material Need"}).map((request)=>(
+                <Marker position={[request.latitude, request.longitude]} icon={iconMarker2}>
+                    <Popup>
+                    <div className='popup'>
+                        <div className='popup__title'>
+                            Request n°{request.id} - {request.task_type}
+                        </div>
+                        <div className='popup__subtitle'>
+                            {request.description}
+                        </div>
+                        <div className='popup__button'>
+                            <Link to={`/request/${request.id}`}>Find out more</Link>
+                        </div>
+                    </div>
+                    </Popup>
+                </Marker>
+            ))}
+    </MapContainer>
+    ),[requests],
+)
+
 
     return(
     <div className='map__background'>
@@ -143,51 +178,13 @@ useEffect(()=>{
 
         </div>
         <div className="map__container">
-            <MapContainer center={[48.8588376, 2.2775176]} zoom={13} scrollWheelZoom={false} className={`${isAuthenticated === true ? 'map' : 'map'}`}>
-                <MapEvents />
-                <Test />
-                <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                detectRetina={true}
-                />
-                    {
-                        requests.filter((request)=>{return request.task_type ==="One-time Need"}).map((request)=>(
-                        <Marker position={[request.latitude, request.longitude]} icon={iconMarker1}>
-                            <Popup>
-                            <div className='popup'>
-                                <div className='popup__title'>
-                                    Request n°{request.id} - {request.task_type}
-                                </div>
-                                <div className='popup__subtitle'>
-                                    {request.description}
-                                </div>
-                                <div className='popup__button'>
-                                    <Link to={`/request/${request.id}`}>Find out more</Link>
-                                </div>
-                            </div>
-                            </Popup>
-                        </Marker>
-                    ))}
-                    {
-                        requests.filter((request)=>{return request.task_type ==="Material Need"}).map((request)=>(
-                        <Marker position={[request.latitude, request.longitude]} icon={iconMarker2}>
-                            <Popup>
-                            <div className='popup'>
-                                <div className='popup__title'>
-                                    Request n°{request.id} - {request.task_type}
-                                </div>
-                                <div className='popup__subtitle'>
-                                    {request.description}
-                                </div>
-                                <div className='popup__button'>
-                                    <Link to={`/request/${request.id}`}>Find out more</Link>
-                                </div>
-                            </div>
-                            </Popup>
-                        </Marker>
-                    ))}
-            </MapContainer>
+            {
+                map ? <MapEvents map={map} />: null
+            }
+            {
+                // map ? <FlyToSelectedLocation map={map} /> : null
+            }
+            {displayMap}
             <div className='request__container'>
                 <div className="request__container__list">
                     <div className='request__title'>
@@ -199,9 +196,7 @@ useEffect(()=>{
                             requests.filter((request)=>{return request.task_type ==="Material Need"})
                             .map((request)=>(
                         <li key={request.id} className='request__item' onClick={()=>{
-                            setSelectedLatitude(request.latitude);
-                            setSelectedLongitude(request.longitude);
-                            // setSelectedRequest({latitude:request.latitude,longitude:request.longitude})
+                            map.flyTo([request.latitude, request.longitude], 15);
                         }}>
                             <div className='request__item__container'>
                                 <div className='request__item__title'>{request.title}</div>
@@ -240,9 +235,8 @@ useEffect(()=>{
                                 .map((request)=>(
                             <li key={request.id} className='request__item'>
                                 <div className='request__item__container' onClick={()=>{
-                                    // setSelectedRequest({latitude:request.latitude,longitude:request.longitude})
-                                    setSelectedLatitude(request.latitude);
-                                    setSelectedLongitude(request.longitude)
+                                    map.flyTo([request.latitude, request.longitude], 14);
+
                                 }}>
                                     <div className='request__item__title'>{request.title}</div>
                                     <span className='request__item__arrow' onClick={() => {
