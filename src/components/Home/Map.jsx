@@ -23,17 +23,6 @@ export default function Map(){
     const [openItemId,setOpenItemId] = useState(null);
     const [map,setMap] = useState(null);
 
-
-    const iconMarker1 = new Leaflet.Icon({
-        iconUrl: marker_1,
-        iconSize: [35, 35],
-      })
-    const iconMarker2 = new Leaflet.Icon({
-        iconUrl: marker_2,
-        iconSize: [35, 35],
-      })
-    
-
     function MapEvents({map}) {
 
         const onMove = useCallback(() => {
@@ -113,7 +102,16 @@ useEffect(()=>{
 },[isAuthenticated,token]);
 
 const displayMap = useMemo(
-    (iconMarker1,iconMarker2) => (
+    () => {
+        const iconMarker1 = new Leaflet.Icon({
+            iconUrl: marker_1,
+            iconSize: [35, 35],
+        })
+        const iconMarker2 = new Leaflet.Icon({
+            iconUrl: marker_2,
+            iconSize: [35, 35],
+        })
+        return(
         <MapContainer center={[48.8588376, 2.2775176]} zoom={13} scrollWheelZoom={false} ref={setMap} className={`${isAuthenticated === true ? 'map' : 'map'}`}>        
         <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -156,9 +154,9 @@ const displayMap = useMemo(
                     </Popup>
                 </Marker>
             ))}
-    </MapContainer>
-    ),[requests,isAuthenticated],
-)
+        </MapContainer>
+            )
+        },[requests,isAuthenticated]);
 
 
     return(
@@ -176,7 +174,7 @@ const displayMap = useMemo(
             {
                 map ? <MapEvents map={map} />: null
             }
-            {displayMap(iconMarker1,iconMarker2)}
+            {displayMap}
             <div className='request__container'>
                 <div className="request__container__list">
                     <div className='request__title'>
