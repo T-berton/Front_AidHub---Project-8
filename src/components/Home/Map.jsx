@@ -113,7 +113,7 @@ useEffect(()=>{
 },[isAuthenticated,token]);
 
 const displayMap = useMemo(
-    () => (
+    (iconMarker1,iconMarker2) => (
         <MapContainer center={[48.8588376, 2.2775176]} zoom={13} scrollWheelZoom={false} ref={setMap} className={`${isAuthenticated === true ? 'map' : 'map'}`}>        
         <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -157,7 +157,7 @@ const displayMap = useMemo(
                 </Marker>
             ))}
     </MapContainer>
-    ),[requests,iconMarker1,iconMarker2,isAuthenticated],
+    ),[requests,isAuthenticated],
 )
 
 
@@ -176,7 +176,7 @@ const displayMap = useMemo(
             {
                 map ? <MapEvents map={map} />: null
             }
-            {displayMap}
+            {displayMap(iconMarker1,iconMarker2)}
             <div className='request__container'>
                 <div className="request__container__list">
                     <div className='request__title'>
