@@ -20,7 +20,7 @@ return (
             <div className='home__text'>
                 <h1 className='home__text__title'>Innovative solutions for your assistance needs</h1>
                 <p className='home__text__subtitle'>Discover all the support resources you need in one place.</p>
-                <Link to={`/`} className='btn'>JOIN US NOW !</Link>
+                <Link to={`/sign_up`} className='btn'>JOIN US NOW !</Link>
                 <div className='home__text__keynumbers'>
                     <div className='home__text__keynumbers__item'>
                         <h1 className='home__text__keynumbers__item__title'>300+</h1>

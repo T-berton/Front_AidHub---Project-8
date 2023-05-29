@@ -95,7 +95,7 @@ useEffect(()=>{
         fetchAllRequests();
         const intervalFetch = setInterval(()=>{
             fetchAllRequests();
-        },5000);
+        },10000);
         return () => clearInterval(intervalFetch);
     }
 

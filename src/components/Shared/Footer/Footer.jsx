@@ -33,16 +33,16 @@ function Footer(){
                                         <Link to={`/`} className='footer__item'>Home</Link>
                                     </li>
                                     <li>
-                                        <Link to={`/`} className='footer__item'>Conversations</Link>
+                                        <Link to={`/conversation`} className='footer__item'>My Conversations</Link>
                                     </li>
                                     <li>
-                                        <Link to={`/`} className='footer__item'>Map</Link>
+                                        <Link to={`/myrequest`} className='footer__item'>My Request</Link>
                                     </li>
                                     <li>
-                                        <Link to={`/`} className='footer__item'>Submit A Request</Link>
+                                        <Link to={`/submit_request`} className='footer__item'>Submit A Request</Link>
                                     </li>
                                     <li>
-                                        <Link to={`/`} className='footer__item' onClick={logOut}>SIGN OUT</Link>
+                                        <Link to={`/sign_out`} className='footer__item' onClick={logOut}>SIGN OUT</Link>
                                     </li>
                                 </ul>
                     ):(
@@ -51,10 +51,10 @@ function Footer(){
                             <Link to={`/`} className='footer__item'>Home</Link>
                         </li>
                         <li>
-                            <Link to={`/`} className='footer__item'>Sign In</Link>
+                            <Link to={`/sign_in`} className='footer__item'>Sign In</Link>
                         </li>
                         <li>
-                            <Link to={`/`} className='footer__item'>Sign Up</Link>
+                            <Link to={`/sign_up`} className='footer__item'>Sign Up</Link>
                         </li>
                     </ul>
                     )}               
