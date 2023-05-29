@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { decodeToken  } from "react-jwt";
 import { Icon } from '@iconify/react';
 import profile_picture_1 from '../../assets/undraw_male_avatar_g98d.svg'
+import { API_URL } from './config';
 
 
 
@@ -26,7 +27,7 @@ export default function Conversation(){
   
   const fetchMessage = useCallback(async (conversationId) => {
     try {
-      const response = await fetch(`http://localhost:4000/messages?conversation_id=${conversationId}`,{
+      const response = await fetch(`${API_URL}/messages?conversation_id=${conversationId}`,{
         headers:{
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
@@ -48,7 +49,7 @@ export default function Conversation(){
   
 async function sendMessage(){
   try {
-    const response = await fetch(`http://localhost:4000/messages`,{
+    const response = await fetch(`${API_URL}/messages`,{
         method:"POST",
         body: JSON.stringify({
           "message":{
@@ -77,7 +78,7 @@ async function sendMessage(){
       try {
         const myDecodedToken = decodeToken(token);
         setCurrentUserId(myDecodedToken.user_id);      
-        const response = await fetch(`http://localhost:4000/conversations?my_conversations=true`,{
+        const response = await fetch(`${API_URL}/conversations?my_conversations=true`,{
               headers:{
                   'Authorization': `Bearer ${token}`,
                   'Content-Type': 'application/json'

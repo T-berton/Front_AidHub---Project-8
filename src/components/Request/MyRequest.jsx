@@ -4,6 +4,8 @@ import './myrequest.css'
 import { AuthContext } from '../../contexts/AuthContext'
 import { toast } from 'react-toastify';
 import { Icon } from '@iconify/react';
+import { API_URL } from './config';
+
 
 
 
@@ -16,7 +18,7 @@ export default function MyRequest(){
     useEffect(()=>{
         async function fetchData(){
             try {
-                const response = await fetch(`http://localhost:4000/requests?my_requests=true`,{
+                const response = await fetch(`${API_URL}/requests?my_requests=true`,{
                     headers:{
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
@@ -66,7 +68,7 @@ export default function MyRequest(){
 
     async function handleDelete(request_id) {
         try {
-            const response = await fetch(`http://localhost:4000/requests/${request_id}`,{
+            const response = await fetch(`${API_URL}/requests/${request_id}`,{
                 method: "DELETE",
                 headers:{
                     "Authorization": `Bearer ${token}`,

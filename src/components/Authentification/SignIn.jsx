@@ -7,6 +7,8 @@ import { Link,useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from '../../contexts/AuthContext'
 import {toast } from 'react-toastify';
+import { API_URL } from './config';
+
 
 export default function SignIn(){
 
@@ -33,7 +35,7 @@ export default function SignIn(){
 
     async function sendData(){
         try {
-            const response = await fetch("http://localhost:4000/auth/login",{
+            const response = await fetch(`${API_URL}/auth/login`,{
                 method: 'POST',
                 body: JSON.stringify({
                     "email":email,

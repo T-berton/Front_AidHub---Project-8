@@ -4,6 +4,8 @@ import './submitrequest.css'
 import { MapContainer,Marker,Popup,TileLayer,useMapEvents } from 'react-leaflet'
 import { AuthContext } from '../../contexts/AuthContext';
 import {toast} from 'react-toastify';
+import { API_URL } from './config';
+
 
 export default function SubmitRequest(){
 
@@ -23,7 +25,7 @@ export default function SubmitRequest(){
 
             if (latitude==null||longitude==null) throw new Error("Choose a location on the map")
 
-            const response = await fetch("http://localhost:4000/requests",{
+            const response = await fetch(`${API_URL}/requests`,{
                 method: "POST",
                 body: JSON.stringify({
                    request:{

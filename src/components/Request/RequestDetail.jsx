@@ -6,6 +6,7 @@ import Nav from "../Shared/Nav/Nav";
 import { MapContainer,Marker,TileLayer} from 'react-leaflet'
 import './requestdetail.css'
 import { Icon } from '@iconify/react';
+import { API_URL } from './config';
 
 
 
@@ -19,7 +20,7 @@ export default function RequestDetail(){
         async function fetchRequest(){
             try {
                 const token = getToken();
-                const response = await fetch(`http://localhost:4000/requests/${requestId}`,
+                const response = await fetch(`${API_URL}/requests/${requestId}`,
                 {
                     headers:{
                         'Authorization': `Bearer ${token}`,
@@ -44,7 +45,7 @@ export default function RequestDetail(){
     async function handleConversation(){
         try {
             const token = getToken();
-            const response = await fetch("http://localhost:4000/conversations",
+            const response = await fetch(`${API_URL}/conversations`,
             {
                 method:"POST",
                 body:JSON.stringify({

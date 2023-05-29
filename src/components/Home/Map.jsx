@@ -10,6 +10,8 @@ import marker_1 from '../../assets/map_marker_1.png'
 import marker_2 from '../../assets/map_marker_2.png'
 import {debounce} from "lodash"
 import { toast } from 'react-toastify';
+import { API_URL } from './config';
+
 
 
 export default function Map(){
@@ -46,7 +48,7 @@ export default function Map(){
 
     const fetchRequest=  useCallback(async(latitude,longitude)=>{
         try {
-            const response = await fetch(`http://localhost:4000/requests?latitude=${latitude}&longitude=${longitude}`,{
+            const response = await fetch(`${API_URL}/requests?latitude=${latitude}&longitude=${longitude}`,{
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -75,7 +77,7 @@ export default function Map(){
 useEffect(()=>{
     async function fetchAllRequests() {
         try {
-            const response = await fetch(`http://localhost:4000/requests`, {  // Your API endpoint for all requests
+            const response = await fetch(`${API_URL}/requests`, {  // Your API endpoint for all requests
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'

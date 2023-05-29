@@ -2,6 +2,8 @@ import './signup.css'
 import { Link,useNavigate } from 'react-router-dom';
 import { useRef, useState } from 'react'
 import {toast } from 'react-toastify';
+import { API_URL } from './config';
+
 
 export default function SignUp(){
     const [firstName,setFirstName] = useState("");
@@ -30,7 +32,7 @@ export default function SignUp(){
             formData.append('user[password]',password);
             formData.append('user[government_file]',governmentFile);
             
-            const response = await fetch("http://localhost:4000/users",{
+            const response = await fetch(`${API_URL}/users`,{
                 method: 'POST',
                 body: formData,
             });
