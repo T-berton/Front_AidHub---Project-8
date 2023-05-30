@@ -3,6 +3,7 @@ import { Link,useNavigate } from 'react-router-dom';
 import { useRef, useState } from 'react'
 import {toast } from 'react-toastify';
 import { API_URL } from '../../config';
+import { DotLoader } from 'react-spinners';
 
 
 export default function SignUp(){
@@ -13,13 +14,14 @@ export default function SignUp(){
     const [governmentFile,setGovernmentFile] = useState(null);
     const [fileName, setFileName] = useState('');
     const navigate = useNavigate();
+    const [isLoading,setLoading] = useState(false);
 
 
     const governmentFileName = useRef();
 
     async function sendData(){
+        setLoading(true);
         try {
-
             const filePattern = /\.(pdf|jpg|jpeg|png)$/;
             if (!governmentFile) throw new Error('No file selected');
             if (governmentFile == null) throw new Error("This field is mandatory.")
@@ -55,6 +57,9 @@ export default function SignUp(){
             toast.error(`${error}`);
     
         }
+        finally{
+            setLoading(false);
+        }
     }
 
     const handleFirstName = (event)=>{
@@ -82,6 +87,7 @@ export default function SignUp(){
 
     return(
         <div className='signup'>  
+            {isLoading && <div className='loading-spinner'><DotLoader color='#968864'/></div>}
             <div className='signup__container'>
                 <div className='signup__left'>
                     <h3 className='signup__title'>Let's get you started</h3>
@@ -110,7 +116,7 @@ export default function SignUp(){
                             <input id='fileUpload' type='file' ref={governmentFileName} onChange={handleGovernmentFile} className='hidden'/>
                         </div>
 
-                        <input type='submit' value={`Sign in`} className='form__submit'/>
+                        <input type='submit' value={`Sign up`} className='form__submit' disabled={isLoading}/>
                         <p>Already a user? <Link to={`/sign_in`}>Login</Link></p>
                     </form>
                 </div>

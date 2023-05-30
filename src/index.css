@@ -55,6 +55,13 @@ a:hover{
   padding-right: 4rem;
   margin-bottom: 5rem;
 }
+.loading-spinner{
+  position: fixed;
+  z-index: 9999;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
 
 .img{
   width: 100%;
