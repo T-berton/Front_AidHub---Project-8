@@ -15,7 +15,8 @@ function Home() {
 return (
     <>
     <Nav/>
-        {!isAuthenticated && (
+        {!isAuthenticated ? (
+            <> 
             <div className='container home__grid'>
             <div className='home__text'>
                 <h1 className='home__text__title'>Innovative solutions for your assistance needs</h1>
@@ -40,10 +41,14 @@ return (
                 <img src={hero_banner} alt="World Map" className='img' />
             </div>
         </div>
-        )} 
-        <Map/>
         <HowDoesItWork/>
         <Testimonial/>
+        </>
+        ):(
+            <Map/> 
+        )
+    } 
+        
     <Footer/>
     </>
 )
