@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { decodeToken  } from "react-jwt";
 import { Icon } from '@iconify/react';
 import profile_picture_1 from '../../assets/undraw_male_avatar_g98d.svg'
-import { API_URL } from './config';
+import { API_URL } from '../../config';
 
 
 

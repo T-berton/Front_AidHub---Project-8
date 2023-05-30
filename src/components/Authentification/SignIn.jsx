@@ -7,7 +7,7 @@ import { Link,useNavigate } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from '../../contexts/AuthContext'
 import {toast } from 'react-toastify';
-import { API_URL } from './config';
+import { API_URL } from '../../config';
 
 
 export default function SignIn(){

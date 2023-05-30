@@ -10,7 +10,7 @@ import marker_1 from '../../assets/map_marker_1.png'
 import marker_2 from '../../assets/map_marker_2.png'
 import {debounce} from "lodash"
 import { toast } from 'react-toastify';
-import { API_URL } from './config';
+import { API_URL } from '../../config';
 
 
 

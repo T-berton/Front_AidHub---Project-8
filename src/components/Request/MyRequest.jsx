@@ -4,7 +4,7 @@ import './myrequest.css'
 import { AuthContext } from '../../contexts/AuthContext'
 import { toast } from 'react-toastify';
 import { Icon } from '@iconify/react';
-import { API_URL } from './config';
+import { API_URL } from '../../config';
 
 
 

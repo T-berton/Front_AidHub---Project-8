@@ -6,7 +6,7 @@ import Nav from "../Shared/Nav/Nav";
 import { MapContainer,Marker,TileLayer} from 'react-leaflet'
 import './requestdetail.css'
 import { Icon } from '@iconify/react';
-import { API_URL } from './config';
+import { API_URL } from '../../config';
 
 
 

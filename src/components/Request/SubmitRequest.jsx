@@ -4,7 +4,7 @@ import './submitrequest.css'
 import { MapContainer,Marker,Popup,TileLayer,useMapEvents } from 'react-leaflet'
 import { AuthContext } from '../../contexts/AuthContext';
 import {toast} from 'react-toastify';
-import { API_URL } from './config';
+import { API_URL } from '../../config';
 
 
 export default function SubmitRequest(){
