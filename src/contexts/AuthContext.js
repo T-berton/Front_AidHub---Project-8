@@ -1,5 +1,7 @@
 import { useEffect, useState, createContext } from 'react';
 import ActionCable from 'actioncable';
+import { API_URL } from '../config';
+
 
 export const AuthContext = createContext();
 
@@ -14,7 +16,7 @@ export function AuthProvider({children}){
         setIsAuthenticated(token !== null);
         if(token && !CableApp?.cable){
             const newCableApp = {}
-            newCableApp.cable = ActionCable.createConsumer(`ws://localhost:4000/cable?token=${token}`);
+            newCableApp.cable = ActionCable.createConsumer(`${API_URL}/cable?token=${token}`);
             setCableApp(newCableApp);
         } 
         setLoading(false);

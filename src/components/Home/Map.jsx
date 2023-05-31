@@ -76,8 +76,7 @@ export default function Map(){
     const debouncedFetchRequest = debounce(fetchRequest,100);
 
     useEffect(() => {
-        // Appel initial à fetchRequest avec les coordonnées du centre par défaut
-        fetchRequest(51.505, -0.09);
+        fetchRequest(48.86,  2.33);
       }, [fetchRequest]);
 
 
