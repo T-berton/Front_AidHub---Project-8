@@ -1,6 +1,5 @@
 import { useEffect, useState, createContext } from 'react';
 import ActionCable from 'actioncable';
-import { API_URL } from '../config';
 
 
 export const AuthContext = createContext();
@@ -16,7 +15,8 @@ export function AuthProvider({children}){
         setIsAuthenticated(token !== null);
         if(token && !CableApp?.cable){
             const newCableApp = {}
-            newCableApp.cable = ActionCable.createConsumer(`${API_URL}/cable?token=${token}`);
+            const backendUrl = process.env.REACT_APP_BACKEND_URL || 'ws://localhost:4000';
+            newCableApp.cable = ActionCable.createConsumer(`${backendUrl}/cable?token=${token}`);
             setCableApp(newCableApp);
         } 
         setLoading(false);
