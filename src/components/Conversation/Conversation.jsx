@@ -1,6 +1,6 @@
 import Nav from '../Shared/Nav/Nav'
 import './conversation.css'
-import { useContext, useEffect, useState,useCallback } from 'react'
+import { useContext, useEffect, useState,useCallback,useRef } from 'react'
 import { AuthContext } from '../../contexts/AuthContext';
 import { toast } from 'react-toastify';
 import { decodeToken  } from "react-jwt";
@@ -18,7 +18,7 @@ export default function Conversation(){
   const [currentUserId,setCurrentUserId] = useState(null);
   const [selectedConversation,setSelectedConversation] = useState(null);
   const [messages,setMessages] = useState({});
-  const [subscription,setSubscription] = useState(null);
+  const subscription = useRef(null);
   const [messageSent,setMessageSent] = useState("");
   const [isLoading,setLoading] = useState(false);
   const token = getToken();
@@ -119,19 +119,17 @@ async function sendMessage(){
       fetchConversations();
   },[token]);
 
+
   useEffect(()=>{
     if (selectedConversation && !messages[selectedConversation]) {
       fetchMessage(selectedConversation);
     }
   },[selectedConversation,fetchMessage,messages]);
-  
+
   useEffect(()=>{
     if (selectedConversation && CableApp?.cable) {
-        if (subscription){
-            subscription.unsubscribe();
-        }
         
-        const newSubscription = CableApp.cable.subscriptions.create({
+         subscription.current = CableApp.cable.subscriptions.create({
             channel: "MessagesChannel",
             conversation_id: selectedConversation,
         },{
@@ -143,7 +141,7 @@ async function sendMessage(){
                 }
             }
         });
-        setSubscription(newSubscription);
+        // setSubscription(newSubscription);
     } else {
         if (!selectedConversation) {
             console.warn("No conversation is selected");
@@ -153,11 +151,12 @@ async function sendMessage(){
         }
     }
     return ()=>{
-        if (subscription) {
-            subscription.unsubscribe();
-        }
+      if (subscription.current) {
+        subscription.current.unsubscribe();
+        subscription.current = null;
+    }
     };
-},[selectedConversation,CableApp?.cable,subscription]);
+},[selectedConversation,CableApp?.cable]);
 
 
   if (Loading) {
