@@ -15,7 +15,7 @@ export function AuthProvider({children}){
         setIsAuthenticated(token !== null);
         if(token && !CableApp?.cable){
             const newCableApp = {}
-            const backendUrl = process.env.REACT_APP_BACKEND_URL || 'ws://localhost:4000';
+            const backendUrl = process.env.REACT_APP_BACKEND_URL || 'wss://localhost:4000';
             console.log(`BackendURL: ${backendUrl}`);
             newCableApp.cable = ActionCable.createConsumer(`${backendUrl}/cable?token=${token}`);
             setCableApp(newCableApp);
