@@ -7,6 +7,7 @@ import { decodeToken  } from "react-jwt";
 import { Icon } from '@iconify/react';
 import profile_picture_1 from '../../assets/undraw_male_avatar_g98d.svg'
 import { API_URL } from '../../config';
+import { DotLoader } from 'react-spinners';
 
 
 
@@ -19,6 +20,7 @@ export default function Conversation(){
   const [messages,setMessages] = useState({});
   const [subscription,setSubscription] = useState(null);
   const [messageSent,setMessageSent] = useState("");
+  const [isLoading,setLoading] = useState(false);
   const token = getToken();
   
 
@@ -26,6 +28,7 @@ export default function Conversation(){
 
   
   const fetchMessage = useCallback(async (conversationId) => {
+    setLoading(true);
     try {
       const response = await fetch(`${API_URL}/messages?conversation_id=${conversationId}`,{
         headers:{
@@ -44,6 +47,9 @@ export default function Conversation(){
       
     } catch (error) {
       toast.error(`${error}`);
+    }
+    finally{
+      setLoading(false);
     }
   },[token]);
   
@@ -75,6 +81,7 @@ async function sendMessage(){
 
   useEffect(()=>{
     async function fetchConversations(){
+      setLoading(true);
       try {
         const myDecodedToken = decodeToken(token);
         setCurrentUserId(myDecodedToken.user_id);      
@@ -103,6 +110,9 @@ async function sendMessage(){
 
       } catch (error) {
           toast.error(`${error}`)
+      }
+      finally{
+        setLoading(false);
       }
   }
 
@@ -157,6 +167,7 @@ async function sendMessage(){
 return(
   <>
     <Nav/>
+    {isLoading && <div className='loading-spinner'><DotLoader color='#968864'/></div>}
     <div className='conversation__container'>
       <div className='conversation__header'>
         <div className='conversation__header__title'>

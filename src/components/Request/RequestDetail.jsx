@@ -7,17 +7,20 @@ import { MapContainer,Marker,TileLayer} from 'react-leaflet'
 import './requestdetail.css'
 import { Icon } from '@iconify/react';
 import { API_URL } from '../../config';
+import { DotLoader } from 'react-spinners';
 
 
 
 export default function RequestDetail(){
     const {requestId} = useParams();
     const {getToken} = useContext(AuthContext);
+    const [isLoading,setLoading] = useState(false);
 
     const [request,setRequest] = useState(null);
 
     useEffect(()=>{
         async function fetchRequest(){
+            setLoading(true);
             try {
                 const token = getToken();
                 const response = await fetch(`${API_URL}/requests/${requestId}`,
@@ -36,6 +39,8 @@ export default function RequestDetail(){
                 setRequest(data);
             } catch (error) {
                 toast.error(`${error}`)
+            }finally{
+                setLoading(false);
             }
         }
         fetchRequest();
@@ -43,6 +48,7 @@ export default function RequestDetail(){
 
 
     async function handleConversation(){
+        setLoading(true);
         try {
             const token = getToken();
             const response = await fetch(`${API_URL}/conversations`,
@@ -69,6 +75,8 @@ export default function RequestDetail(){
         } catch (error) {
             toast.error(`${error}`);
 
+        }finally{
+            setLoading(false);
         }
     }
 
@@ -76,6 +84,7 @@ export default function RequestDetail(){
         <>
         <Nav/>
         <div className="container">
+            {isLoading && <div className='loading-spinner'><DotLoader color='#424241'/></div>}
             {request ? (
                 <>
             <div className="detail__text">

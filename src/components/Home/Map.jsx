@@ -11,6 +11,8 @@ import marker_2 from '../../assets/map_marker_2.png'
 import {debounce} from "lodash"
 import { toast } from 'react-toastify';
 import { API_URL } from '../../config';
+import { DotLoader } from 'react-spinners';
+
 
 
 
@@ -24,6 +26,8 @@ export default function Map(){
     const [allRequestsCounter,setAllRequestsCounter] = useState([]);
     const [openItemId,setOpenItemId] = useState(null);
     const [map,setMap] = useState(null);
+    const [isLoading,setLoading] = useState(false);
+
 
     function MapEvents({map}) {
 
@@ -47,6 +51,7 @@ export default function Map(){
    
 
     const fetchRequest=  useCallback(async(latitude,longitude)=>{
+        setLoading(true);
         try {
             const response = await fetch(`${API_URL}/requests?latitude=${latitude}&longitude=${longitude}`,{
                 headers: {
@@ -61,6 +66,9 @@ export default function Map(){
             setRequest(data);
         } catch (e) {
             toast.error(`${e}`)
+        }
+        finally{
+            setLoading(false);
         }
  
     },[token]);
@@ -177,6 +185,7 @@ const displayMap = useMemo(
                 map ? <MapEvents map={map} />: null
             }
             {displayMap}
+            {isLoading && <div className='loading-spinner'><DotLoader color='#424241'/></div>}
             <div className='request__container'>
                 <div className="request__container__list">
                     <div className='request__title'>

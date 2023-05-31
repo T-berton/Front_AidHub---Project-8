@@ -8,6 +8,7 @@ import { useContext } from 'react'
 import { AuthContext } from '../../contexts/AuthContext'
 import {toast } from 'react-toastify';
 import { API_URL } from '../../config';
+import { DotLoader } from 'react-spinners';
 
 
 export default function SignIn(){
@@ -16,6 +17,8 @@ export default function SignIn(){
     const [password,setPassword] = useState('');
     const {isAuthenticated,logIn} = useContext(AuthContext);
     const navigate = useNavigate();
+    const [isLoading,setLoading] = useState(false);
+
 
     const handleEmail = (event) => {
         setEmail(event.target.value);
@@ -34,6 +37,7 @@ export default function SignIn(){
     })
 
     async function sendData(){
+        setLoading(true);
         try {
             const response = await fetch(`${API_URL}/auth/login`,{
                 method: 'POST',
@@ -57,13 +61,15 @@ export default function SignIn(){
 
         } catch (error) {
             toast.error(`Connexion error: ${error}`);
-
-            
+        }
+        finally{
+            setLoading(false);
         }
     }
 
     return(
         <div className='login__container'>
+            {isLoading && <div className='loading-spinner'><DotLoader color='#968864'/></div>}
             <div className='login__nav__container'>
                 <ul className='login__nav'>
                 <li>
@@ -90,7 +96,7 @@ export default function SignIn(){
                         <input type='password' value={password} onChange={handlePassword} placeholder='•••••••••' className='login__form_input'  required/>
                     </div>
                     <div className='login__form__item'>
-                        <input type='submit' value={`Sign in`} className='login__form__submit'/>
+                        <input type='submit' value={`Sign in`} className='login__form__submit' disabled={isLoading}/>
                         <p>No account? Sign up <Link to={`/sign_up`}>here</Link></p>
                     </div>
                 </form>

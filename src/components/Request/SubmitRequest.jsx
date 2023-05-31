@@ -5,6 +5,7 @@ import { MapContainer,Marker,Popup,TileLayer,useMapEvents } from 'react-leaflet'
 import { AuthContext } from '../../contexts/AuthContext';
 import {toast} from 'react-toastify';
 import { API_URL } from '../../config';
+import { DotLoader } from 'react-spinners';
 
 
 export default function SubmitRequest(){
@@ -16,11 +17,13 @@ export default function SubmitRequest(){
     const [longitude,setLongitude] = useState(null);
     const [position,setPosition] = useState(null);
     const {getToken} = useContext(AuthContext);
+    const [isLoading,setLoading] = useState(false);
 
 
     const token = getToken();
 
     async function sendData(){
+        setLoading(true);
         try {
 
             if (latitude==null||longitude==null) throw new Error("Choose a location on the map")
@@ -56,6 +59,8 @@ export default function SubmitRequest(){
             
         } catch (error) {
             toast.error(`${error}`);
+        }finally{
+            setLoading(false);
         }
     }
 
@@ -89,6 +94,7 @@ export default function SubmitRequest(){
         <div>
             <Nav/>
                     <form className='submitrequest__form submitrequest__container' onSubmit={handleSubmit}>
+                    {isLoading && <div className='loading-spinner'><DotLoader color='#424241'/></div>}
                         <div className='submitrequest__left'>
                             <h1>
                                 Submit a <span className='text-secondary'>request</span>
@@ -121,7 +127,7 @@ export default function SubmitRequest(){
                         <LocationMarker/>
                         </MapContainer>
                         </div>
-                        <input type='submit' value={`Submit request`} className='form__submit request__submit'/>
+                        <input type='submit' value={`Submit request`} className='form__submit request__submit' disabled={isLoading}/>
                     </form>
 
         </div>

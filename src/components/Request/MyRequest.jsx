@@ -5,6 +5,7 @@ import { AuthContext } from '../../contexts/AuthContext'
 import { toast } from 'react-toastify';
 import { Icon } from '@iconify/react';
 import { API_URL } from '../../config';
+import { DotLoader } from 'react-spinners';
 
 
 
@@ -13,10 +14,13 @@ export default function MyRequest(){
     const {getToken} = useContext(AuthContext);
     const [requests,setRequests] = useState(null);
     const token = getToken();
+    const [isLoading,setLoading] = useState(false);
+
 
 
     useEffect(()=>{
         async function fetchData(){
+            setLoading(true);
             try {
                 const response = await fetch(`${API_URL}/requests?my_requests=true`,{
                     headers:{
@@ -33,7 +37,9 @@ export default function MyRequest(){
                 setRequests(response_json);
     
             } catch (error) {
-                toast.error(`${error}`)
+                toast.error(`${error}`);
+            }finally{
+                setLoading(false);
             }
         }
         fetchData();
@@ -89,6 +95,7 @@ export default function MyRequest(){
         <>
         <Nav/>
         <div className='container'>
+            {isLoading && <div className='loading-spinner'><DotLoader color='#424241'/></div>}
             <h1>My <span className='text-secondary'>pending requests</span></h1>
             <div className='myrequest__grid'>
                 {requests && requests.length !== 0 ? (
