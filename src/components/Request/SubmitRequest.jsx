@@ -1,6 +1,7 @@
-import { useContext, useState } from 'react'
+import { useContext, useState,useEffect } from 'react'
 import Nav from '../Shared/Nav/Nav'
 import './submitrequest.css'
+import {useNavigate } from 'react-router-dom'
 import { MapContainer,Marker,Popup,TileLayer,useMapEvents } from 'react-leaflet'
 import { AuthContext } from '../../contexts/AuthContext';
 import {toast} from 'react-toastify';
@@ -18,6 +19,9 @@ export default function SubmitRequest(){
     const [position,setPosition] = useState(null);
     const {getToken} = useContext(AuthContext);
     const [isLoading,setLoading] = useState(false);
+    const [userPosition, setUserPosition] = useState([48.8566, 2.3522]);
+    const [map,setMap] = useState(null);
+    const navigate = useNavigate();
 
 
     const token = getToken();
@@ -55,8 +59,8 @@ export default function SubmitRequest(){
             setLongitude(null);
             setTitle('');
             setTypeTask("Material Need");
+            navigate('/')
             toast.success('Request submitted successfully'); // affiche une notification de succès
-            
         } catch (error) {
             toast.error(`${error}`);
         }finally{
@@ -70,7 +74,7 @@ export default function SubmitRequest(){
     })
 
     function LocationMarker(){
-        const map = useMapEvents({
+        useMapEvents({
             click(e){
                 let lat = parseFloat(e.latlng.lat.toFixed(10));
                 let lng = parseFloat(e.latlng.lng.toFixed(10));
@@ -89,6 +93,18 @@ export default function SubmitRequest(){
         else 
         return null
     }
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const pos = [position.coords.latitude,position.coords.longitude];
+                setUserPosition(pos);
+                if (map) map.flyTo(pos,13);          
+            });
+        } else {
+            toast.error("Geolocation not supported");
+        }
+    }, [map]);
+
 
     return(
         <div>
@@ -118,7 +134,7 @@ export default function SubmitRequest(){
                         </div>
                         <div className='submitrequest__right'>
                         <label className='form__label'>Where do you need help ?</label>
-                        <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false} className='submitrequest__mapcontainer'>
+                        <MapContainer center={userPosition} zoom={13} ref={setMap} scrollWheelZoom={false} className='submitrequest__mapcontainer'>
                         <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

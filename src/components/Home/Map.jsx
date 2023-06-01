@@ -27,6 +27,8 @@ export default function Map(){
     const [openItemId,setOpenItemId] = useState(null);
     const [map,setMap] = useState(null);
     const [isLoading,setLoading] = useState(false);
+    const [userPosition, setUserPosition] = useState(null);
+
 
 
     function MapEvents({map}) {
@@ -35,7 +37,6 @@ export default function Map(){
             let lat = parseFloat(map.getCenter().lat);
             let lng = parseFloat(map.getCenter().lng);
             debouncedFetchRequest(lat,lng)
-            console.log("coucou")
             }, [map])
 
         useEffect(() => {
@@ -76,8 +77,28 @@ export default function Map(){
     const debouncedFetchRequest = debounce(fetchRequest,100);
 
     useEffect(() => {
-        fetchRequest(48.86,  2.33);
-      }, [fetchRequest]);
+        setLoading(true);
+        if (navigator.geolocation){
+            navigator.geolocation.getCurrentPosition((position)=>{ 
+                const pos = [position.coords.latitude,position.coords.longitude];
+                setUserPosition(pos);
+                fetchRequest(pos[0],pos[1]);
+                if (map) map.flyTo(pos,13);          
+            },
+            (error) => {
+                const pos =[48.8588376,2.2775176]
+                setUserPosition(pos)
+                fetchRequest(pos[0],pos[1]);
+                if (map) map.flyTo(pos,13);          
+            });
+        } else {
+            const pos =[48.8588376,2.2775176]
+            setUserPosition(pos)
+            if (map) map.flyTo(pos,13); 
+        }     
+       
+      }, [fetchRequest,map]);
+
 
 
 
@@ -121,7 +142,7 @@ const displayMap = useMemo(
             iconSize: [35, 35],
         })
         return(
-        <MapContainer center={[48.8588376, 2.2775176]} zoom={13} scrollWheelZoom={false} ref={setMap} className={`${isAuthenticated === true ? 'map' : 'map'}`}>        
+        <MapContainer center={userPosition? userPosition:[48.8588376, 2.2775176]} zoom={13} scrollWheelZoom={false} ref={setMap} className={`${isAuthenticated === true ? 'map' : 'map'}`}>        
         <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -165,7 +186,7 @@ const displayMap = useMemo(
             ))}
         </MapContainer>
             )
-        },[requests,isAuthenticated]);
+        },[requests,isAuthenticated,userPosition]);
 
 
     return(
@@ -183,7 +204,7 @@ const displayMap = useMemo(
             {
                 map ? <MapEvents map={map} />: null
             }
-            {displayMap}
+            {userPosition? displayMap : <div className='loading-spinner'><DotLoader color='#424241'/></div> }
             {isLoading && <div className='loading-spinner'><DotLoader color='#424241'/></div>}
             <div className='request__container'>
                 <div className="request__container__list">
