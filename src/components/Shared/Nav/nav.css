@@ -27,7 +27,7 @@
 .nav__mobile{
     visibility: hidden;
 }
-@media (max-width:768px) {
+@media (max-width:1000px) {
     .nav{
         padding-left: 1rem;
         padding-right: 1rem;    
